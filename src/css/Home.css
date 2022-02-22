@@ -1,0 +1,33 @@
+.Home_img{
+    width: 100%;
+    /* height: 100%; */
+    margin: 0 0 -13rem;
+    z-index: -1;
+    -webkit-mask-image: linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,0));
+    mask-image: linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,0));
+}
+
+
+.Home_row{
+    display: flex;
+    z-index: 1;
+    margin: 0 5px 0 5px;
+}
+
+@media  screen and (max-width: 768px){
+    .Home_img{
+        width: 100%;
+        /* height: 100%; */
+        margin: 0 0 -3.5rem;
+        z-index: -1;
+        -webkit-mask-image: linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,0));
+            mask-image: linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,0));
+    }
+
+    .Home_row{
+        display: flex;
+        flex-direction: column;
+        z-index: 1;
+        margin: 0 5px 0 5px;
+    } 
+}

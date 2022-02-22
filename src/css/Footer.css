@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+.footer {
+  height: 90px;
+  background-color: blue;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+}
+.text p {
+  letter-spacing: 1px;
+  font-size: 17px;
+}
+
+.text {
+  display: flex;
+  margin-top: 40px;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.Contact_div {
+  display: flex;
+  margin-top: 40px;
+}
+
+.Contact_div a {
+  margin: 0 10px 0 10px;
+}
+.Contact_div i {
+  font-size: 30px;
+  color: #fff;
+  opacity: 0.6;
+}
+.Contact_div i:hover {
+  opacity: 1;
+}
+
+
+@media only screen and (max-width: 450px) {
+  .text {
+    display: flex;
+    margin-top: 23px;
+    justify-content: space-between;
+    flex-direction: column;
+    white-space: nowrap;
+  }
+  .footer{
+    height: 35px;
+  }
+  .Contact_div{
+    margin-top: 20px;
+  }
+  .Contact_div a {
+    margin: 0 5px 0 5px;
+  }
+  .text p {
+    letter-spacing: 1px;
+    font-size: 14px;
+  }
+}

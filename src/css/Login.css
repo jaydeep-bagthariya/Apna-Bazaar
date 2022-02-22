@@ -1,0 +1,120 @@
+.main_div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login_page {
+  margin-top: 2rem;
+  height: 70%;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid lightgrey;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.img_div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img_div > img {
+  width: 250px;
+  cursor: pointer;
+
+}
+.form_div {
+  height: 95%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.form_div > input {
+  width: 90%;
+  outline-color: rgb(153, 253, 253);
+  height: 23px;
+  margin-top: 0.5rem;
+}
+
+.form_div > button {
+  width: 10rem;
+  height: 1.75rem;
+  margin: 0.5rem auto 0 auto;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  letter-spacing: 2px;
+  font-weight: 500;
+  font-size: 1.2rem;
+  background-color: #232f3f;
+}
+.form_div > label {
+  margin-top: 0.5rem;
+}
+
+.term_div {
+  margin: 0.5rem 0 0 0;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.term_div > p {
+  text-align: justify;
+}
+.term_div > button {
+  /* align-items: center; */
+  margin: 0.5rem auto 1rem auto;
+  width: 85%;
+  border-radius: 5px;
+  height: 1.75rem;
+
+  letter-spacing: 2px;
+  font-weight: 500;
+  font-size: 1.2rem;
+  background-color: #ff9a19;
+  cursor: pointer;
+  
+}
+.submit_btn {
+  margin: 1rem auto 1rem auto;
+  width: 50%;
+  cursor: pointer;
+}
+
+
+@media  screen and (max-width: 768px){
+
+  .login_page{
+    width: 60%;
+    height: 80%;
+  }
+  .term_div > button {
+    /* height: 3.5rem; */
+  height: 30%;
+
+  }
+}
+
+@media  screen and (max-width: 499px){
+
+  .login_page{
+    width: 90%;
+    height: 80%;
+  }
+
+.img_div > img {
+  width: 78%;
+
+}
+.term_div > button {
+  height: 30%;
+
+}
+}

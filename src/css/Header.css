@@ -1,0 +1,110 @@
+.Header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  background-color: #232f3f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.Header a{
+  text-decoration: none;
+}
+
+.Header_logo {
+  width: 100px;
+  object-fit: contain;
+  margin: 10 20px;
+}
+.Header_Seachbar {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  border-radius: 24px;
+}
+
+.Search_logo {
+  padding: 5px;
+  background-color: #cd9042;
+}
+
+.Header_input {
+  height: 10px;
+  padding: 10px;
+  width: 100%;
+  /* border: none; */
+}
+
+.Header_nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.Header_nav_item {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px 0 10px;
+  cursor: pointer;
+}
+.Header_nav_cart {
+  margin: 10px 10px 0 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.nav_one {
+  color: #ff9a19;
+  font-size: 15px;
+  font-weight: 500;
+}
+.nav_two {
+  color: #ffff;
+  font-size: 17px;
+  font-weight: 800;
+}
+.Header_CartIcon {
+  color: #ffff;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.nav_orderCount {
+  margin-top: 5px;
+  position: absolute;
+  top: 1rem;
+  margin-left: 30px;
+}
+
+@media only screen and (max-width: 574px) {
+  .Header_Seachbar {
+    grid-area: search;
+  }
+  .Header_logo {
+    grid-area: logo;
+  }
+  .Header_nav {
+    grid-area: nav;
+  }
+  .Header {
+    height: 125px;
+    display: grid;
+    grid-template-areas:
+      "logo logo logo search search search"
+      "nav nav nav nav nav nav";
+  }
+  .Header_Seachbar {
+    margin: -1.5rem 4rem 0 0;
+  }
+  .Header_logo {
+    margin: -1.5rem 0 0 2rem;
+    padding-left: 1rem;
+  }
+  .Header_nav {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: -2.5rem;
+  }
+  .nav_orderCount {
+    margin: 52px 0 0 31px;
+  }
+}
