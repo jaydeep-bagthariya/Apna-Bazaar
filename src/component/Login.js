@@ -1,109 +1,163 @@
-import React from "react";
-import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import "../css/Login.css";
+import React, { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import validator from "validator";
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { authentication } from '../Redux/auth/action';
 
+const theme = createTheme();
 
-function Login() {
+export default function Login() {
 
-  
-  //state for hold useremail and password
-    const [user, newuser] = useState({
-    email: "",
-    password: "",
-  });
+    //state for hold useremail and password
+  // const [user, newuser] = useState({
+  // email: "",
+  // password: "",
+  // });
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isSignUp, setIsSignUp] = useState(true);
   
 
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { success } = useSelector(state => state.authAction)
 
-      const auth = getAuth();
+  const auth = getAuth();
 
-  function inputDetail(e) {
-    newuser({ ...user, [e.target.name]: e.target.value });
-  }
+  // function inputDetail(e) {
+  //   newuser({ ...user, [e.target.name]: e.target.value });
+  // }
+
+  const changeAuthState = (e) => {
+		e.preventDefault();
+		setIsSignUp((prevState) => {
+			return !prevState;
+		});
+	};
 
  async function loginuser(e) {
     e.preventDefault();
-
-    
-    //validate useremail and login authentication
-    if (validator.isEmail(user.email)) {
-      await  signInWithEmailAndPassword(auth,user.email,user.password).then((data)=>{
-        console.log(data.user)
-        history.push("/");
-      }).catch((error)=>alert(error.message))
-
-    } else {
-      alert("invalid email or password");
-    }
-  }
-
-  async function register() {
-    
-    
-    //validate useremail and then create user account
-    if (validator.isEmail(user.email)) {
-      await createUserWithEmailAndPassword(auth, user.email, user.password)
-        .then((data) => {
-          console.log(data);
+    // dispatch(authentication(email, password, isSignUp))
+    if(isSignUp) {
+      //validate useremail and login authentication
+      if (validator.isEmail(email) && password.length>5) {
+        await  signInWithEmailAndPassword(auth, email, password).then((data)=>{
+          console.log(data.user)
+          dispatch({type: 'AUTH_SUCCESS', payload: data.user})
           history.push("/");
+        }).catch((error)=> {
+          alert(error.message)
+          dispatch({type: 'AUTH_FAIL', payload: error.message})
         })
-        .catch((error) => alert(error.message));
-    } else {
-      alert("invalid email or password");
+  
+      } else {
+        alert("invalid email or password");
+      }
+    }
+    else {
+      //validate useremail and then create user account
+      if (validator.isEmail(email) && password.length>5) {
+        await createUserWithEmailAndPassword(auth, email, password)
+          .then((data) => {
+            console.log(data.user);
+            dispatch({type: 'AUTH_SUCCESS', payload: data.user})
+            history.push("/");
+          })
+          .catch((error) => {
+            alert(error.message)
+            dispatch({type: 'AUTH_FAIL', payload: error.message})
+          });
+      } else {
+        alert("invalid email or password");
+      }
     }
   }
 
   return (
-    <>
-      <div className="main_div">
-        <div className="login_page">
-          <Link to="/">
-            <div className="img_div">
-              <img
-                src="https://img.maximummedia.ie/her_ie/eyJkYXRhIjoie1widXJsXCI6XCJodHRwOlxcXC9cXFwvbWVkaWEtaGVyLm1heGltdW1tZWRpYS5pZS5zMy5hbWF6b25hd3MuY29tXFxcL3dwLWNvbnRlbnRcXFwvdXBsb2Fkc1xcXC8yMDE1XFxcLzA4XFxcLzA2MTUzOTM0XFxcL2FtYXpvbi5qcGdcIixcIndpZHRoXCI6NzAwLFwiaGVpZ2h0XCI6MzcwLFwiZGVmYXVsdFwiOlwiaHR0cHM6XFxcL1xcXC93d3cuaGVyLmllXFxcL2Fzc2V0c1xcXC9pbWFnZXNcXFwvaGVyXFxcL25vLWltYWdlLnBuZz9pZD1iNmY4NGQ2MjdiNDExNGYwMGY1MFwiLFwib3B0aW9uc1wiOltdfSIsImhhc2giOiIyOWE3MjkwZmU5M2Q3NzY2ZTdhNjdiMjlkZDA2NzY2YjE4NDA2NmNhIn0=/amazon.jpg"
-                alt="logo"
-              />
-            </div>
-          </Link>
-          <form action="" className="form_div">
-            <label htmlFor="email">Enter Your Email</label>
-            <input
-              type="text"
-              name="email"
+    <ThemeProvider theme={theme}>
+			{/* {success ? <div>{history.push("/")}</div> : null} */}
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            {isSignUp ? 'Sign In' : 'Sign Up'}
+          </Typography>
+          <Box component="form" onSubmit={loginuser} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               id="email"
-              placeholder="Enter Your E-mail"
-              autoComplete="off"
-              onChange={inputDetail}
-              value={user.email}
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              autoFocus
             />
-            <label htmlFor="password">Enter Your Password</label>
-            <input
-              type="password"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               name="password"
+              label="Password"
+              type="password"
               id="password"
-              placeholder="Enter Your Password"
-              autoComplete="off"
-              onChange={inputDetail}
-              value={user.password}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              autoComplete="current-password"
             />
-
-            <button onClick={loginuser}>Log in</button>
-          </form>
-          <div className="term_div">
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cum fuga
-              obcaecati voluptatum eos dolorum rerum voluptatem. Obcaecati sint
-              dicta recusandae dignissimos minima quidem.
-            </p>
-            <button onClick={register}>!New to Here,Create Account</button>
-          </div>
-        </div>
-      </div>
-    </>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {isSignUp ? 'Sign In' : 'Sign Up'}
+            </Button>
+            <Grid container>
+              {/* <Grid item>
+                <Link href="#" variant="body2" onClick={(e) => changeAuthState(e)}>
+                  {isSignUp ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+                </Link>
+              </Grid> */}
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+    // <>
+		//  	{success ? <div>{history.push("/")}</div> : null}
+    //   <form onSubmit={loginuser}>
+    //     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+    //     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+    //     <button type='submit'>sign in</button>
+    //   </form>
+    // </>
+    // <h1>Login</h1>
   );
 }
-
-export default Login;

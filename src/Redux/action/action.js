@@ -1,3 +1,6 @@
+import { collection, addDoc, getDocs, doc, deleteDoc } from "firebase/firestore";
+// import { doc, deleteDoc } from "firebase/firestore";
+import db from "../../firebase";
 
 //function for add product in data-layer
 export const addToCart = (data) => {
@@ -7,6 +10,44 @@ export const addToCart = (data) => {
   };
 };
 
+export const fetchUserCart = (userID) => dispatch => {
+  const cartProduct = [];
+  getDocs(collection(db, "cart"))
+  .then(res => {
+    res.forEach((doc)=> {
+      const obj = {
+        id: doc.id,
+        ...doc.data(),
+      }
+      cartProduct.push(obj);
+    });
+    console.log(cartProduct);
+    if (cartProduct !== undefined) {
+      dispatch({type: "FETCH_USERCART", payload: cartProduct})
+    }
+  })
+  // try {
+  //   // setLoading(true);
+  //   const products = getDocs(collection(db, "cart"));
+  //   console.log(products);
+  //   const productsList = [];
+  //   products.map((doc) => {
+  //     const obj = {
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }
+  //     productsList.push(obj);
+  //     console.log(productsList);
+  //     // setLoading(false);
+  //   });
+
+  //   // setProducts(productsList);
+  // } catch (error) {
+  //   console.log(error);
+  //   // setLoading(false);
+  // }   
+}
+
 
 //function for remove  product in data-layer
 export const removeFromCart = (id) => {
@@ -15,18 +56,6 @@ export const removeFromCart = (id) => {
     id: id,
   };
 };
-
-
-//function for set username and user-email data-layer
-export const setUsername = (username, mail, user) => {
-  return {
-    type: "SET_USER",
-    username: username,
-    usermail: mail,
-    user,
-  };
-};
-
 
 //function for remove all product in data-layer
 export const emptyCart = () => {
@@ -44,9 +73,10 @@ export const removeSingleItem = (id) => {
   };
 };
 
-export  const addSingleItem=(data)=>{
+export  const addSingleItem=(id)=>{
   return{
     type:'ADD_SINGLE_ITEM',
-    data
+    id
   }
 }
+

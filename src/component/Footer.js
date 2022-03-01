@@ -7,26 +7,26 @@ function Footer() {
     <>
       <footer className="footer">
         <div className="text">
-          <p>Created By Jaydip Sidapara,&nbsp;</p>
-          <p>Let's Meet</p>
+          <p>Created By Jaydeep Bagthariya,&nbsp;</p>
+          <p>Let's Meet On</p>
         </div>
         <div className="Contact_div">
-          <Tooltip title="instagram" arrow>
-            <a href="http://instagram.com/jd_0p.code?utm_source=qr" target="-">
-              <i className="bx bxl-instagram"></i>
+          <Tooltip title="LinkedIn" arrow>
+            <a href="https://www.linkedin.com/in/jaydeep-bagthariya-56029618a/" target="-">
+              <i className="bx bxl-linkedin"></i>
             </a>
           </Tooltip>
 
-          <Tooltip title="github" arrow>
-            <a href="https://github.com/jaydip-github" target="-">
+          <Tooltip title="Github" arrow>
+            <a href="https://github.com/jaydeep-bagthariya" target="-">
               <i className="bx bxl-github"></i>
             </a>
           </Tooltip>
 
-          <Tooltip title="whatsapp" arrow>
+          <Tooltip title="Instagram" arrow>
             {/* <a href="http://wa.me/qr/2BMNDCURTE6DA1" target="-"> */}
-            <a href="http://wa.me/916354160180" target="-">
-              <i className="bx bxl-whatsapp"></i>
+            <a href="https://www.instagram.com/j._starr_7/" target="-">
+              <i className="bx bxl-instagram"></i>
             </a>
           </Tooltip>
         </div>

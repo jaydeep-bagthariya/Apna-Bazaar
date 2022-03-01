@@ -1,18 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Home.css";
 import Product from "./Product";
+import axios from "axios";
 
 function Home() {
+  const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
+	useEffect(() => {
+		axios
+			.get("https://fakestoreapi.com/products")
+			.then((res) => {
+				setProducts(res.data);
+				// setLoading(false);
+			})
+			.catch((error) => {
+				console.log(error);
+				// setLoading(false);
+			});
+	}, []);
+
   return (
     <>
       <div className="Home">
         <img
-          src="https://store-images.s-microsoft.com/image/apps.16285.14618985536919905.552c0017-6644-49a8-8467-8f7b34ce0428.30ad6b05-16d9-4d5e-a242-43107708a16a?mode=scale&q=90&h=1080&w=1920"
+          // src="https://store-images.s-microsoft.com/image/apps.16285.14618985536919905.552c0017-6644-49a8-8467-8f7b34ce0428.30ad6b05-16d9-4d5e-a242-43107708a16a?mode=scale&q=90&h=1080&w=1920"
+          src="./images/background-photo.jpg"
           alt="pic"
           className="Home_img"
         />
-
         <div className="Home_row">
+          {products.map((product, id) => {
+            return (
+              <Product product={product} key={id}/>
+            );
+          })}
+        </div>
+        {/* <div className="Home_row">
           <Product
             id={1}
             imageLink="https://t4.ftcdn.net/jpg/04/00/60/83/240_F_400608394_b3gFxkvI0KbaXHs6yAHCMqQLV7FSYlcz.jpg"
@@ -28,10 +51,10 @@ function Home() {
             detail="this is amazone product this is build by amazone"
             price="250"
             rating={4}
-          />
-        </div>
-        <div className="Home_row">
-          <Product
+          /> */}
+        {/* </div>
+        <div className="Home_row"> */}
+          {/* <Product
             id={3}
             imageLink="https://t3.ftcdn.net/jpg/01/32/73/36/240_F_132733698_Cl1Mwc3su7ZdfF0B10oiDzofpbTrkoTn.jpg"
             pname="fire-stick tv remote"
@@ -55,7 +78,7 @@ function Home() {
             price="600"
             rating={5}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

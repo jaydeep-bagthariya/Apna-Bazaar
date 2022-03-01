@@ -1,37 +1,48 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { getAuth, signOut } from "@firebase/auth";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import "../css/Header.css";
+import { signOutUser } from "../Redux/auth/action";
 
 
 
 function Header() {
   const auth = getAuth();
   const history = useHistory();
-
+  const dispatch = useDispatch();
   const dataarray = useSelector((state) => state.cartAction);
-  const username = dataarray.username;
-
+  const {username, userID, token} = useSelector((state) => state.authAction);
+  // const authDetail = useSelector((state) => state.authAction);
+  // const username = dataarray.username;
+  // console.log(username, userID, token);
   
   window.onload=()=>{
+    console.log("onload");
     history.push('/')
   }
 
   
   //function for user login or signup for security 
   const signinOrSignup = () => {
+    console.log(username);
     if (username) {
       const confirmlogout = window.confirm("are You sure for Logout?");
       if (confirmlogout) {
+        // dispatch(signOutUser())
+        // window.location.reload();
         signOut(auth).then(() => {
+          console.log("out");
+          dispatch({type: 'SIGN_OUT'})
           history.replace("/");
+          window.location.reload();
         });
       }
     } else {
       history.push("/login");
+      console.log("else");
     }
   };
 
@@ -44,8 +55,18 @@ function Header() {
             className="Header_logo"
             alt="header-logo"
           />
+          {/* <img src="./images/shopping.png" className="Header_logo" alt="header-logo"/> */}
         </Link>
         <div className="Header_Seachbar">
+          <div className="header_select_div">
+            <select id="cars" name="cars" className="header_select">
+              <option value="all">All</option>
+              <option value="men's clothing">Men's Clothing</option>
+              <option value="women's clothing">Women's Clothing</option>
+              <option value="jewelery">Jewelery</option>
+              <option value="electronics">Electronics</option>
+            </select>
+          </div>
           <input type="text" className="Header_input" />
           <SearchIcon className="Search_logo" />
         </div>
@@ -60,10 +81,10 @@ function Header() {
               <span className="nav_two">& return</span>
             </div>
           </Link>
-          <div className="Header_nav_item">
+          {/* <div className="Header_nav_item">
             <span className="nav_one">Your</span>
             <span className="nav_two">Prime</span>
-          </div>
+          </div> */}
           <Link to="/checkout">
             <div className="Header_nav_cart">
               <ShoppingBasketIcon className="Header_CartIcon" />

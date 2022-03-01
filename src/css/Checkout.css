@@ -61,7 +61,7 @@ margin-left: 3rem;
 .btn_div {
   margin-top: 1.5rem;
 }
-.btn_div > button {
+/* .btn_div > button {
   height: 2.5rem;
   width: 18rem;
   letter-spacing: 3px;
@@ -69,6 +69,22 @@ margin-left: 3rem;
   font-size: 1.2rem;
   background-color: #ff9a19;
   cursor: pointer;
+} */
+
+.btn_div > button {
+  height: 2.5rem;
+  width: 200px;
+  /* letter-spacing: 3px; */
+  /* font-weight: 900;
+  font-size: 1.2rem; */
+  background-color: #ffe600;
+  cursor: pointer;
+  border-radius: 20px;
+  border: none;
+}
+
+.btn_div > button:hover {
+  background-color: #eedf14;
 }
 
 .chekcout_product {

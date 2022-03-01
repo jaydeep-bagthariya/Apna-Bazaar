@@ -8,50 +8,115 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import "../css/Product.css";
 
-import { addToCart } from "../Redux/action/action";
-import { useDispatch } from "react-redux";
+import { addSingleItem, addToCart } from "../Redux/action/action";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { collection, addDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import db from "../firebase";
 
-function Product({id, imageLink, pname, detail, price, rating }) {
+function Product({ product }) {
+  const history = useHistory();
   const dispatch = useDispatch();
+  const { userID } = useSelector(state => state.authAction);
+
+  const detailBtnHandler = () => {
+    history.push({
+      pathname: `/detail/${product.id}`,
+      state: { product }
+    })
+  }
+
+  const postItemToCart = async (product, userID) => {
+    if(userID !== null) {
+      const id = product.id.toString().concat(userID);
+
+      let count = 0;
+      const docRef = doc(db, "cart", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data().count, product.id);
+        count = docSnap.data().count;
+        const cartRef = doc(db, 'cart', id);
+        setDoc(cartRef, { count: count+1 }, { merge: true });
+        dispatch(addSingleItem(product.id))
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        const newProduct = {...product, userID, count: 1}
+        const docRef = await setDoc(doc(db, "cart", id), newProduct)
+        .then(() => {
+          console.log("new cart product added");
+          dispatch(addToCart(newProduct))});
+      }
+    }
+    else {
+      console.log("Please Sign In first !!!");
+    }
+  }
   return (
+    // <Card xs={12} sm={6} md={4}>
     <Card className="product">
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {pname}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {detail}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="span">
-          <h3><span style={{ marginRight: "2px" }}>₹</span>{price}</h3>
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="div">
-        <div className="rating_div">
-    {Array(rating).fill().map((_,i)=>{
-      return <p key={i} style={{color:'yellow'}}>🌟 &nbsp;</p>
-    })}
-        </div>
-        </Typography>
-      </CardContent>
-      <CardActionArea>
+      {/* <CardActionArea className="action-_area">
         <CardMedia
           component="img"
           alt="Contemplative Reptile"
           height="250"
           className="Product_img"
-          image={imageLink}
+          image={product.image}
           title="Contemplative Reptile"
         />
-      </CardActionArea>
+      </CardActionArea> */}
+      <div style={{display: "flex", alignItems: "center", justifyContent: 'center', marginTop: '1rem', cursor: 'pointer'}}>
+        <img src={product.image} alt="product-image" className="product-img"/>
+      </div>
+      <CardContent style={{flexGrow: '1'}}>
+        <Typography gutterBottom variant="h5" component="h2" className="title_div">
+          <abbr title={product.title}>{product.title.length < 22 ? product.title : `${product.title.slice(0, 22)}...`}</abbr>
+          {/* {product.title} */}
+        </Typography>
+        {/* <Typography variant="body2" color="textSecondary" component="p">
+          {detail}
+        </Typography> */}
+        <Typography variant="body2" color="textSecondary" component="span">
+          <h3><span style={{ marginRight: "2px" }}>$</span>{product.price}</h3>
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="div">
+        <div className="rating_div">
+          {Array(Math.round(product?.rating?.rate)).fill().map((_,i)=>{
+            return <p key={i} style={{color:'yellow'}}>🌟 &nbsp;</p>
+          })}
+        </div>
+        </Typography>
+      </CardContent>
+      {/* <CardActionArea>
+        <CardMedia
+          component="img"
+          alt="Contemplative Reptile"
+          // height="250"
+          className="Product_img"
+          image={product.image}
+          title="Contemplative Reptile"
+        />
+      </CardActionArea> */}
       <CardActions>
         <Button
           size="small"
           color="primary"
           onClick={() => {
-            dispatch(addToCart({id, imageLink, pname, detail, price, rating }));
+            postItemToCart(product, userID)
+            // dispatch(addToCart(product));
           }}
         >
           Add to Cart
+        </Button>
+        <Button
+          size="small"
+          color="primary"
+          onClick={detailBtnHandler}
+        >
+          Click To See More
         </Button>
       </CardActions>
     </Card>

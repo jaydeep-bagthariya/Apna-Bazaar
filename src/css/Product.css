@@ -1,13 +1,35 @@
 .product {
   background-color: #ffff;
   z-index: 1;
-  margin: 5px;
-  width: 100%;
+  margin: 10px;
+  width: 23%;
+  /* width: 100%; */
+}
+
+.title_div {
+  clear: both;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+abbr[title] {
+  border-bottom: none !important;
+  text-decoration: none !important;
 }
 
 .Product_img {
   max-width: 400px;
   margin: 5px;
+  overflow: hidden;
+  /* height: 0;
+  padding-top: 56.25%;
+  margin-top: 30; */
+}
+.product-img {
+  width: 175px;
+	height: 205px;
+	overflow: hidden;
 }
 .rating_div{
   display: flex;
@@ -15,4 +37,10 @@
 .Home .Home_row .product:hover {
   transform: translateY(-2px);
   box-shadow: 0 1rem 3rem rgba(0,0,0,.175)
+}
+
+@media  screen and (max-width: 768px){
+  .product {
+    width: 100%;
+  }
 }

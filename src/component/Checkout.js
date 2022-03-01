@@ -1,21 +1,67 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "../css/Checkout.css";
 import CartProduct from "./CartProduct";
 import { useHistory } from "react-router";
+import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
+import { fetchUserCart } from "../Redux/action/action";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import db from "../firebase";
 
 
 function Checkout() {
   const history = useHistory();
 
+  const dispatch = useDispatch();
   const cartdata = useSelector((state) => state.cartAction);
+  const { userID } = useSelector(state => state.authAction);
   const newfilterarr = cartdata.cart;
+
+  console.log(newfilterarr);
+  useEffect(async () => {
+		// dispatch(fetchUserCart(userID));
+    const cartProduct = [];
+    const q = query(collection(db, "cart"), where("userID", "==", userID));
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const obj = {
+        id: doc.id,
+        ...doc.data(),
+      }
+      cartProduct.push(obj);
+      // doc.data() is never undefined for query doc snapshots
+      // console.log(doc.id, " => ", doc.data());
+    });
+    dispatch({type: "FETCH_USERCART", payload: cartProduct});
+    // try {
+    //   // setLoading(true);
+    //   const products = await getDocs(collection(db, "cart"));
+    //   // console.log(products);
+    //   const productsList = [];
+    //   products.forEach((doc) => {
+    //     const obj = {
+    //       id: doc.id,
+    //       ...doc.data(),
+    //     }
+    //     productsList.push(obj);
+    //     console.log(productsList);
+    //     // setLoading(false);
+    //   });
+  
+    //   // setProducts(productsList);
+    // } catch (error) {
+    //   console.log(error);
+    //   // setLoading(false);
+    // }   
+	}, [userID, fetchUserCart]);
 
   //array for bulk product in state cart-array
   const cartproductarray = [
     ...newfilterarr
       .reduce((accum, val) => {
-        let piece = `${val.pname}`;
+        let piece = `${val.title}`;
+        // console.log(accum, piece);
         if (!accum.has(piece)) {
           accum.set(piece, { ...val, count: 1 });
         } else {
@@ -41,31 +87,30 @@ function Checkout() {
   //loop for fetch total price of all product
   var sub = 0;
   cartdata.cart.forEach((val) => {
-    sub = sub + parseInt(val.price);
+    sub = sub + parseInt(val.price) * parseInt(val.count);
   });
   return (
     <>
-    {
+    {/* {
 console.log(newfilterarr)
 
-    }
+    } */}
       <div className="chekcout_cart">
         <div className="chekcout_product">
           <h2 className="username">hello,{cartdata.username || "guest"} </h2>
           <br />
           <hr />
           <h1 className="heading">Your order summery</h1>
-          {cartproductarray.map((val, index) => {
+          {newfilterarr.map((val, index) => {
             return (
               <CartProduct
                 key={index}
                 id={val.id}
                 count={val.count}
-                imageLink={val.imageLink}
-                detail={val.detail}
-                pname={val.pname}
+                image={val.image}
+                title={val.title}
                 price={val.price}
-                rating={val.rating}
+                rating={val.rating.rate}
               />
             );
           })}

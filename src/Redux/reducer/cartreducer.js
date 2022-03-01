@@ -29,22 +29,11 @@ const cartAction = (state = initialState, action) => {
       };
     }
 
-
-    //case for set username and useremail in state
-    case "SET_USER":
-      return {
-        ...state,
-        username: action.username,
-        usermail: action.usermail,
-        user: action.user,
-      };
-
-
     //case for remove specific item in state cart-array
     case "REMOVE_SINGLE_ITEM":
       for (let i = 0; i <= state.cart.length; i++) {
         if (state.cart[i].id === action.id) {
-          state.cart.splice(i, 1);
+          state.cart[i].count--;
           break;
         }
       }
@@ -54,10 +43,10 @@ const cartAction = (state = initialState, action) => {
       };
 
       case "ADD_SINGLE_ITEM":
-        console.log('action',action.data.id);
-        for (let i = 0; i <= state.cart.length; i++) {
-          if (state.cart[i].id === action.data.id) {
-            state.cart.splice(i,0,action.data);
+        console.log('action',action.id);
+        for (let i = 0; i < state.cart.length; i++) {
+          if (state.cart[i].id === action.id) {
+            state.cart[i].count++;
             break;
           }
         }
@@ -66,7 +55,12 @@ const cartAction = (state = initialState, action) => {
           cart:state.cart
         }
 
-
+      case "FETCH_USERCART":
+        console.log("fetch", action.payload);
+        return {
+          ...state,
+          cart: action.payload,
+        }
 
     default:
       return state;
