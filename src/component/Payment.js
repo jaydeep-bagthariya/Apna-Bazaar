@@ -8,11 +8,12 @@ import { useEffect } from "react";
 import axios from "axios";
 import { emptyCart } from "../Redux/action/action";
 import db from "../firebase";
-import { doc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc, collection, deleteDoc } from "firebase/firestore";
+
+
 
 function Payment() {
   const dispatch = useDispatch();
-
   const history = useHistory();
 
   const stripe = useStripe();
@@ -24,27 +25,14 @@ function Payment() {
   };
 
   const cartdata = useSelector((state) => state.cartAction);
-  const user = cartdata.user;
+  const user = useSelector((state) => state.authAction);
 
-  //array for bulk product in state cart-array
-  const cartproductarray = [
-    ...cartdata.cart
-      .reduce((accum, val) => {
-        let piece = `${val.pname}`;
-        if (!accum.has(piece)) {
-          accum.set(piece, { ...val, count: 1 });
-        } else {
-          accum.get(piece).count++;
-        }
-        return accum;
-      }, new Map())
-      .values(),
-  ];
+  const totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
 
   //loop for fetch total price of all product
   var sum = 0;
   cartdata.cart.forEach((val) => {
-    sum = sum + parseInt(val.price);
+    sum = sum + parseInt(val.price) * parseInt(val.count);
   });
 
   //state for strict payment button which is click only once
@@ -61,17 +49,32 @@ function Payment() {
     const fetchClientSecret = async () => {
       const response = await axios({
         method: "post",
-        url: `http://localhost:4000/payments/create?total=${(sum + 150) * 100}`,
+        url: `http://localhost:5001/e-commerce-web-app-dc26f/us-central1/api/payments/create?total=${(sum + 150) * 100}`,
       });
       setClientSecret(response.data.clientSecret);
     };
 
     fetchClientSecret();
-    console.log("clientsecret", clientSecret);
   }, [cartdata.cart]);
+  
+  console.log("clientsecret", clientSecret);
 
+  const deleteCartItem = async(id) => {
+    const key = id.toString().concat(user.userID);
+    await deleteDoc(doc(db, "cart", key))
+    .then(() => {console.log("item remove successfully");})
+    .catch(err => {console.log("Error ", err.message);})
+  }
+
+  const emptyAllCartItems = () => {
+    cartdata.cart.map((item) => {
+      deleteCartItem(item.id);
+    })
+    dispatch(emptyCart());
+  }
   //payment button function
   const handleSubmit = async (event) => {
+    console.log("looks we are close");
     event.preventDefault();
     setProcessing(true);
 
@@ -83,13 +86,13 @@ function Payment() {
         },
       })
       .then(({ paymentIntent }) => {
-        //store order data in cloud storage(firestore)
+        // store order data in cloud storage(firestore)
         const userRef = collection(db, "user");
-        const idRef = doc(userRef, `${user.uid}`);
+        const idRef = doc(userRef, `${user.userID}`);
         const orders = collection(idRef, "orders");
         const instanceRef = doc(orders, `${paymentIntent.id}`);
         setDoc(instanceRef, {
-          cart: cartproductarray,
+          cart: cartdata.cart,
           amount: sum,
           created: paymentIntent.created,
         });
@@ -103,7 +106,8 @@ function Payment() {
         history.replace("/order");
 
         //empty state cart array
-        dispatch(emptyCart());
+        emptyAllCartItems();
+        // dispatch(emptyCart());
       });
   };
 
@@ -120,7 +124,7 @@ function Payment() {
       <div className="payment">
         <div className="payment_container">
           <h1>
-            CheckOut <Link to="/checkout">{cartdata.cart.length} items </Link>
+            CheckOut <Link to="/checkout">{totalItems} items </Link>
           </h1>
 
           <div className="payment_section">
@@ -128,8 +132,8 @@ function Payment() {
               <h3>Your Address</h3>
             </div>
             <div className="payment_address">
-              <p>{cartdata.username}</p>
-              <p>{cartdata.usermail}</p>
+              <p>{user.username}</p>
+              <p>{user.usermail}</p>
               <p>123 street,dream city</p>
               <p>Paradise</p>
             </div>
@@ -140,17 +144,17 @@ function Payment() {
               <h3>Your Item</h3>
             </div>
             <div className="payment_items">
-              {cartproductarray.map((val, index) => {
+              {cartdata.cart.map((val, index) => {
                 return (
                   <CartProduct
                     key={index}
                     id={val.id}
                     count={val.count}
-                    imageLink={val.imageLink}
-                    detail={val.detail}
-                    pname={val.pname}
+                    image={val.image}
+                    description={val.description}
+                    title={val.title}
                     price={val.price}
-                    rating={val.rating}
+                    rating={val.rating.rate}
                     disablebtn
                   />
                 );
@@ -171,7 +175,7 @@ function Payment() {
 
                 <div className="payment_totalPrice">
                   <h3>
-                    Order Total: <span style={{ marginRight: "2px" }}>₹</span>
+                    Order Total: <span style={{ marginRight: "2px" }}>$</span>
                     {sum + 150}
                   </h3>
 

@@ -6,7 +6,7 @@ import CartProduct from "./CartProduct";
 
 
 function Order({ val }) {
-
+  console.log("value", val);
   return (
     <div className="order_detail">
       <p>
@@ -23,11 +23,11 @@ function Order({ val }) {
               key={index}
               id={val.id}
               count={val.count}
-              imageLink={val.imageLink}
-              detail={val.detail}
-              pname={val.pname}
+              image={val.image}
+              description={val.description}
+              title={val.title}
               price={val.price}
-              rating={val.rating}
+              rating={val.rating.rate}
               disablebtn
             />
           );

@@ -6,16 +6,48 @@ import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import { useDispatch } from 'react-redux';
-import { addToCart } from "../Redux/action/action";
+import { addSingleItem, addToCart } from "../Redux/action/action";
+import { collection, addDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import db from "../firebase";
 
 function Detail() {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
   const product = location.state.product;
+
+  const { userID } = useSelector(state => state.authAction);
+
+  console.log(product);
   
-  const addToCartHandler = () => {
-    dispatch(addToCart(product));
+  const addToCartHandler = async () => {
+    if(userID !== null) {
+      const id = product.id.toString().concat(userID);
+
+      let count = 0;
+      const docRef = doc(db, "cart", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data().count, product.id);
+        count = docSnap.data().count;
+        const cartRef = doc(db, 'cart', id);
+        setDoc(cartRef, { count: count+1 }, { merge: true });
+        dispatch(addSingleItem(product.id))
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        const newProduct = {...product, userID, count: 1}
+        const docRef = await setDoc(doc(db, "cart", id), newProduct)
+        .then(() => {
+          console.log("new cart product added");
+          dispatch(addToCart(newProduct))});
+      }
+    }
+    else {
+      console.log("Please Sign In first !!!");
+    }
   }
   
   return (

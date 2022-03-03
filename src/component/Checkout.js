@@ -14,7 +14,7 @@ function Checkout() {
 
   const dispatch = useDispatch();
   const cartdata = useSelector((state) => state.cartAction);
-  const { userID } = useSelector(state => state.authAction);
+  const { userID, username } = useSelector(state => state.authAction);
   const newfilterarr = cartdata.cart;
 
   console.log(newfilterarr);
@@ -79,7 +79,7 @@ function Checkout() {
       alert("please add some item in cart");
       history.push("/");
     } else {
-      cartdata.username ? history.replace("/payment") : history.push("/login");
+      userID ? history.replace("/payment") : history.push("/login");
     }
   }
 
@@ -97,7 +97,7 @@ console.log(newfilterarr)
     } */}
       <div className="chekcout_cart">
         <div className="chekcout_product">
-          <h2 className="username">hello,{cartdata.username || "guest"} </h2>
+          <h2 className="username">hello,{username || "guest"} </h2>
           <br />
           <hr />
           <h1 className="heading">Your order summery</h1>

@@ -15,18 +15,19 @@ function Orderpage() {
   const [orderDetail, setOrderDetail] = useState([]);
   const [isFetched, newFetched] = useState(false);
 
-  const cartdata = useSelector((state) => state.cartAction);
-  const user = cartdata.user;
+  const user = useSelector((state) => state.authAction);
+  // const user = cartdata.user;
 
   useEffect(() => {
     async function fetchOrderDetail() {
-      if (user) {
+      if (user.userID) {
         const userRef = collection(db, "user");
-        const idRef = doc(userRef, `${user.uid}`);
+        const idRef = doc(userRef, `${user.userID}`);
         const orders = collection(idRef, "orders");
         const querySnapshot = await getDocs(orders);
 
         await querySnapshot.docs.forEach(async (val) => {
+          console.log("val", val.data())
           const valdata = val.data();
           setOrderDetail((preval) => {
             return [
@@ -46,6 +47,7 @@ function Orderpage() {
     fetchOrderDetail();
   }, []);
 
+  console.log(orderDetail);
   return (
     <>
       <div className="order_div">
@@ -65,12 +67,14 @@ function Orderpage() {
               <h2 style={{color:'red'}}>No Order Yet ! 😲</h2>
             </div>
           )
-        ) :
+        ) 
+          :
          (
           <div className="Order_process_div">
             <CircularProgress />
           </div>
-        )}
+        )
+        }
         
       </div>
     </>

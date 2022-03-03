@@ -8,6 +8,7 @@ import Orderpage from "./component/Orderpage";
 import DetailPage from './component/DetailPage';
 import Checkout from "./component/Checkout";
 import Footer from "./component/Footer";
+import Layout from "./component/Layout";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +17,7 @@ import { getAuth, onAuthStateChanged } from "@firebase/auth";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import PaymentHelper from "./component/PaymentHelper";
 require("dotenv").config();
 
 //load stripe
@@ -48,6 +50,19 @@ function App() {
     <>
       <Router>
         <Switch>
+          <Route exact path="/login" component={Login} />
+          {/* <Elements stripe={stripePromise}> */}
+            <Route exact path="/payment" component={PaymentHelper} />
+          {/* </Elements> */}
+          <Route path="/" component={(Layout)} />
+        </Switch>
+      </Router>
+
+
+
+
+      {/* <Router>
+        <Switch>
           <Route exact path="/">
             <Header />
             <Home />
@@ -59,9 +74,7 @@ function App() {
             <Footer />
           </Route>
           <Route exact path="/login">
-            {/* <Header /> */}
             <Login />
-            {/* <Footer /> */}
           </Route>
           <Route exact path="/detail/:id">
             <Header />
@@ -77,7 +90,7 @@ function App() {
             <Route exact path="/payment" component={Payment} />
           </Elements>
         </Switch>
-      </Router>
+      </Router> */}
     </>
   );
 }

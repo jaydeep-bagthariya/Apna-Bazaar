@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { getAuth, signOut } from "@firebase/auth";
@@ -9,15 +9,25 @@ import { signOutUser } from "../Redux/auth/action";
 
 
 
-function Header() {
+function Header(props) {
   const auth = getAuth();
   const history = useHistory();
   const dispatch = useDispatch();
-  const dataarray = useSelector((state) => state.cartAction);
+  const cartdata = useSelector((state) => state.cartAction);
   const {username, userID, token} = useSelector((state) => state.authAction);
   // const authDetail = useSelector((state) => state.authAction);
-  // const username = dataarray.username;
+  // const username = cartdata.username;
   // console.log(username, userID, token);
+
+  const totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const selectedCategoryHandler = (e) => {
+    console.log(e.target.value);
+    setSelectedCategory(e.target.value);
+    props.onItemCategoryChange(e.target.value);
+  }
   
   window.onload=()=>{
     console.log("onload");
@@ -59,7 +69,7 @@ function Header() {
         </Link>
         <div className="Header_Seachbar">
           <div className="header_select_div">
-            <select id="cars" name="cars" className="header_select">
+            <select id="cars" name="cars" className="header_select" onChange={selectedCategoryHandler} value={selectedCategory}>
               <option value="all">All</option>
               <option value="men's clothing">Men's Clothing</option>
               <option value="women's clothing">Women's Clothing</option>
@@ -89,7 +99,7 @@ function Header() {
             <div className="Header_nav_cart">
               <ShoppingBasketIcon className="Header_CartIcon" />
               <span className="nav_orderCount nav_two">
-                {dataarray.cart.length || 0}
+                {totalItems || 0}
               </span>
             </div>
           </Link>
