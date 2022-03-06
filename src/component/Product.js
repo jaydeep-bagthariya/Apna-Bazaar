@@ -1,9 +1,7 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import "../css/Product.css";
@@ -11,9 +9,11 @@ import "../css/Product.css";
 import { addSingleItem, addToCart } from "../Redux/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { collection, addDoc, getDoc } from "firebase/firestore";
+import { getDoc } from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import db from "../firebase";
+import { toast } from 'react-toastify';
+
 
 function Product({ product }) {
   const history = useHistory();
@@ -45,14 +45,14 @@ function Product({ product }) {
         // doc.data() will be undefined in this case
         console.log("No such document!");
         const newProduct = {...product, userID, count: 1}
-        const docRef = await setDoc(doc(db, "cart", id), newProduct)
+        await setDoc(doc(db, "cart", id), newProduct)
         .then(() => {
-          console.log("new cart product added");
+          toast.success("New cart product added successfully")
           dispatch(addToCart(newProduct))});
       }
     }
     else {
-      console.log("Please Sign In first !!!");
+      toast.error("Please sign in first to add product into the cart")
     }
   }
   return (

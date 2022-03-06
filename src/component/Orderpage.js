@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Order from "../component/Order";
 import "../css/Orderpage.css";
-
-import Typography from "@mui/material/Typography";
-import Skeleton from "@mui/material/Skeleton";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { doc, getDocs, collection } from "firebase/firestore";

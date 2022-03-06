@@ -1,5 +1,4 @@
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useState } from "react";
 
 // export const authSuccess = (userID, name, token) => {
 // 	return {

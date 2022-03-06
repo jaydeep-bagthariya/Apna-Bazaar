@@ -1,33 +1,22 @@
 import { useEffect } from "react";
 import "./css/App.css";
-import Header from "./component/Header";
-import Home from "./component/Home";
 import Login from "./component/Login";
-import Payment from "./component/Payment";
-import Orderpage from "./component/Orderpage";
-import DetailPage from './component/DetailPage';
-import Checkout from "./component/Checkout";
-import Footer from "./component/Footer";
 import Layout from "./component/Layout";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUsername } from "./Redux/auth/action";
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import PaymentHelper from "./component/PaymentHelper";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 require("dotenv").config();
-
-//load stripe
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 function App() {
   const auth = getAuth();
   const dispatch = useDispatch();
 
-  const { username, userID, token, usermail, user } = useSelector(state => state.authAction);
+  const { username, userID, usermail } = useSelector(state => state.authAction);
   console.log(username, userID, usermail);
   
   useEffect(() => {
@@ -35,62 +24,22 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log(user);
-        let rowname = user.email.split("@");
-        // dispatch(setUsername(rowname[0], user.email, user.uid));
         dispatch({type: "AUTH_SUCCESS", payload: user});
-      } 
-      // else {
-      //   // dispatch(setUsername(null, null, null));
-      //   console.log("okay");
-      // }
+      }
     });
     return unsubscribe;
   },[]);
+  
   return (
     <>
+      <ToastContainer />
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
-          {/* <Elements stripe={stripePromise}> */}
             <Route exact path="/payment" component={PaymentHelper} />
-          {/* </Elements> */}
           <Route path="/" component={(Layout)} />
         </Switch>
       </Router>
-
-
-
-
-      {/* <Router>
-        <Switch>
-          <Route exact path="/">
-            <Header />
-            <Home />
-            <Footer />
-          </Route>
-          <Route exact path="/checkout">
-            <Header />
-            <Checkout />
-            <Footer />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/detail/:id">
-            <Header />
-            <DetailPage />
-            <Footer />
-          </Route>
-          <Route exact path="/order">
-            <Header />
-            <Orderpage />
-            <Footer />
-          </Route>
-          <Elements stripe={stripePromise}>
-            <Route exact path="/payment" component={Payment} />
-          </Elements>
-        </Switch>
-      </Router> */}
     </>
   );
 }

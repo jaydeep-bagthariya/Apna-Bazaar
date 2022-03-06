@@ -14,20 +14,17 @@ import validator from "validator";
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { authentication } from '../Redux/auth/action';
+// import { authentication } from '../Redux/auth/action';
+import { toast } from 'react-toastify';
+import Loader from './common/Loader';
+
 
 const theme = createTheme();
 
 export default function Login() {
-
-    //state for hold useremail and password
-  // const [user, newuser] = useState({
-  // email: "",
-  // password: "",
-  // });
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [isSignUp, setIsSignUp] = useState(true);
   
@@ -38,10 +35,6 @@ export default function Login() {
 
   const auth = getAuth();
 
-  // function inputDetail(e) {
-  //   newuser({ ...user, [e.target.name]: e.target.value });
-  // }
-
   const changeAuthState = (e) => {
 		e.preventDefault();
 		setIsSignUp((prevState) => {
@@ -51,21 +44,22 @@ export default function Login() {
 
  async function loginuser(e) {
     e.preventDefault();
+    setLoading(true);
     // dispatch(authentication(email, password, isSignUp))
     if(isSignUp) {
       //validate useremail and login authentication
       if (validator.isEmail(email) && password.length>5) {
         await  signInWithEmailAndPassword(auth, email, password).then((data)=>{
-          console.log(data.user)
+          toast.success("User Login Successfully");
           dispatch({type: 'AUTH_SUCCESS', payload: data.user})
           history.push("/");
         }).catch((error)=> {
-          alert(error.message)
+          toast.error("User Login Failed");
           dispatch({type: 'AUTH_FAIL', payload: error.message})
         })
   
       } else {
-        alert("invalid email or password");
+        toast.error("Invalid email or password");
       }
     }
     else {
@@ -73,23 +67,25 @@ export default function Login() {
       if (validator.isEmail(email) && password.length>5) {
         await createUserWithEmailAndPassword(auth, email, password)
           .then((data) => {
-            console.log(data.user);
+            toast.success("Registration Success");
             dispatch({type: 'AUTH_SUCCESS', payload: data.user})
             history.push("/");
           })
           .catch((error) => {
-            alert(error.message)
+            toast.success("Registration Success");
             dispatch({type: 'AUTH_FAIL', payload: error.message})
           });
       } else {
-        alert("invalid email or password");
+        toast.error("Invalid email or password");
       }
     }
+    setLoading(false);
   }
 
   return (
     <ThemeProvider theme={theme}>
 			{/* {success ? <div>{history.push("/")}</div> : null} */}
+      {loading && <Loader />}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -140,24 +136,15 @@ export default function Login() {
               {isSignUp ? 'Sign In' : 'Sign Up'}
             </Button>
             <Grid container>
-              {/* <Grid item>
+              <Grid item>
                 <Link href="#" variant="body2" onClick={(e) => changeAuthState(e)}>
                   {isSignUp ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
                 </Link>
-              </Grid> */}
+              </Grid>
             </Grid>
           </Box>
         </Box>
       </Container>
     </ThemeProvider>
-    // <>
-		//  	{success ? <div>{history.push("/")}</div> : null}
-    //   <form onSubmit={loginuser}>
-    //     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
-    //     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-    //     <button type='submit'>sign in</button>
-    //   </form>
-    // </>
-    // <h1>Login</h1>
   );
 }

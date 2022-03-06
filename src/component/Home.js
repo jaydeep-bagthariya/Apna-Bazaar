@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import "../css/Home.css";
 import Product from "./Product";
 import axios from "axios";
+import Loader from './common/Loader';
 
 function Home(props) {
   const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
+    const ac = new AbortController();
     const fetchProducts = async () => {
+      setLoading(true);
       await axios
         .get("https://fakestoreapi.com/products")
         .then((res) => {
@@ -18,20 +21,22 @@ function Home(props) {
           console.log(error);
           // setLoading(false);
         });
+      setLoading(false);
     }
     fetchProducts();
-	}, []);
+    return () => ac.abort();
+	}, [setLoading]);
 
   return (
     <>
       <div className="Home">
         <img
-          // src="https://store-images.s-microsoft.com/image/apps.16285.14618985536919905.552c0017-6644-49a8-8467-8f7b34ce0428.30ad6b05-16d9-4d5e-a242-43107708a16a?mode=scale&q=90&h=1080&w=1920"
           src="./images/background-photo.jpg"
           alt="pic"
           className="Home_img"
         />
-        <div className="Home_row">
+        {loading ? <Loader /> :
+          <div className="Home_row">
           {
             props.itemCategory === 'all' ?
             products.map((product, id) => {
@@ -47,7 +52,8 @@ function Home(props) {
                 )
               })
           }
-        </div>
+        </div>}
+
       </div>
     </>
   );

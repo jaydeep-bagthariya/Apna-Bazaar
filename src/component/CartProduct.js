@@ -6,6 +6,7 @@ import {
   removeSingleItem,
   addSingleItem,
 } from "../Redux/action/action";
+import { toast } from 'react-toastify';
 import { doc, deleteDoc, getDoc, setDoc } from "firebase/firestore";
 import db from "../firebase";
 
@@ -53,7 +54,7 @@ function CartProduct({
       console.log("No such document!");
     }
 
-    if(count == 1) {
+    if(count === 1) {
       removeAllItems();
     }
     else {
@@ -65,8 +66,12 @@ function CartProduct({
   const removeAllItems = async () => { 
     // const key = id.toString().concat(userID);
     await deleteDoc(doc(db, "cart", key))
-    .then(() => {console.log("item remove successfully");})
-    .catch(err => {console.log("Error ", err.message);})
+    .then(() => {
+      toast.success("Item removed successfully");
+    })
+    .catch(err => {
+      toast.error(`Error: ${err.message}`);
+    })
     dispatch(removeFromCart(id));
   }
   return (

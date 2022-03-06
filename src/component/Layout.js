@@ -7,7 +7,7 @@ import DetailPage from './DetailPage';
 import Checkout from "./Checkout";
 import Footer from "./Footer";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 const Layout = () => {
   const [itemCategory, setItemCategory] = useState("all");

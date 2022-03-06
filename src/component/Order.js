@@ -34,9 +34,9 @@ function Order({ val }) {
         })}
       </div>
       <h4>
-        Amount: 
-         <span style={{ marginRight: "2px" }}>₹</span>
-        {val.userdata.amount}
+        {`Amount: `}  
+         <span style={{ marginRight: "2px" }}>$</span>
+        {val.userdata.amount + 5}
       </h4>
     </div>
   );

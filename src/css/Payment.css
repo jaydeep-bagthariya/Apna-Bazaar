@@ -22,16 +22,29 @@
 .payment_section3 h3,.payment_section3 form{
     margin: 1rem;
 }
+
 .payment_button{
-    margin:-5rem 0 1rem 15rem;
+    /* margin:-5rem 0 1rem 15rem;
     height: 30px;
-    /* letter-spacing: 3px; */
     font-weight: 400;
     font-size: 1.2rem;
     color: black;
     background-color: #ff9a19;
     border-radius: 5px;
+    cursor: pointer; */
+
+    margin:-5rem 0 1rem 15rem;
+    height: 2.5rem;
+    width: 200px;
+    background-color: #ffe600;
     cursor: pointer;
+    border-radius: 20px;
+    border: none;
+    color: black;
+}
+
+.payment_button:hover {
+    background-color: #eedf14;
 }
 
 .payment_title{

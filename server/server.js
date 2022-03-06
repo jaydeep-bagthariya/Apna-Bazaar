@@ -35,6 +35,6 @@ app.post("/payments/create", async (request, response) => {
 });
 
 
-app.listen(4000, () => {
-  console.log("server is running", process.env.REACT_APP_STRIPE_SECRET_KEY);
+app.listen(process.env.PORT || 4000, () => {
+  console.log("server is running");
 });

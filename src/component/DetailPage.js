@@ -1,18 +1,15 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import "../css/Detail.css";
-import CartProduct from "./CartProduct";
-import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import { useDispatch } from 'react-redux';
 import { addSingleItem, addToCart } from "../Redux/action/action";
-import { collection, addDoc, getDoc } from "firebase/firestore";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import db from "../firebase";
+import { toast } from "react-toastify";
 
 function Detail() {
-  const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
   const product = location.state.product;
@@ -39,14 +36,14 @@ function Detail() {
         // doc.data() will be undefined in this case
         console.log("No such document!");
         const newProduct = {...product, userID, count: 1}
-        const docRef = await setDoc(doc(db, "cart", id), newProduct)
+        await setDoc(doc(db, "cart", id), newProduct)
         .then(() => {
-          console.log("new cart product added");
+          toast.success("New cart product added successfully")
           dispatch(addToCart(newProduct))});
       }
     }
     else {
-      console.log("Please Sign In first !!!");
+      toast.error("Please sign in first to add product into the cart")
     }
   }
   
@@ -96,14 +93,6 @@ function Detail() {
           </Typography>
         </div>
       </div>
-      {/* <div>
-        <div className="product_description">
-					<img src={product.image} className="product_page_image" alt="" />
-					<div className="description-wrapper">
-						<p>{product.description}</p>
-					</div>
-				</div>
-      </div> */}
     </>
   );
 }

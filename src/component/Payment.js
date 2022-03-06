@@ -9,7 +9,7 @@ import axios from "axios";
 import { emptyCart } from "../Redux/action/action";
 import db from "../firebase";
 import { doc, setDoc, collection, deleteDoc } from "firebase/firestore";
-
+import { toast } from 'react-toastify';
 
 
 function Payment() {
@@ -32,9 +32,9 @@ function Payment() {
   //loop for fetch total price of all product
   var sum = 0;
   cartdata.cart.forEach((val) => {
-    sum = sum + parseInt(val.price) * parseInt(val.count);
+    sum = sum + val.price * val.count;
   });
-
+  sum = sum.toFixed(2);
   //state for strict payment button which is click only once
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState("");
@@ -49,7 +49,7 @@ function Payment() {
     const fetchClientSecret = async () => {
       const response = await axios({
         method: "post",
-        url: `http://localhost:5001/e-commerce-web-app-dc26f/us-central1/api/payments/create?total=${(sum + 150) * 100}`,
+        url: `http://localhost:4000/payments/create?total=${(sum + 5) * 100 * 75}`,
       });
       setClientSecret(response.data.clientSecret);
     };
@@ -74,7 +74,6 @@ function Payment() {
   }
   //payment button function
   const handleSubmit = async (event) => {
-    console.log("looks we are close");
     event.preventDefault();
     setProcessing(true);
 
@@ -96,13 +95,13 @@ function Payment() {
           amount: sum,
           created: paymentIntent.created,
         });
-
+        
         //update state for payment button
         setSucceeded(true);
         setProcessing(false);
         setError(null);
-
-        //redirect to order when order and payment is confirmed
+        toast.success("Your order placed successfully");
+        
         history.replace("/order");
 
         //empty state cart array
@@ -168,7 +167,7 @@ function Payment() {
             <div className="payment_details">
               <form onSubmit={handleSubmit}>
                 <small className="warning">
-                  please type 424242424.... ,do not enter real cardNumber
+                  Please type 424242424.... do not enter real card number
                 </small>
 
                 <CardElement onChange={handleChange} className="card_element" />
