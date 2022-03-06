@@ -1,0 +1,3 @@
+[submodule "server/using-for-stripe"]
+  path = server/using-for-stripe
+  url = https://github.com/jaydeep-bagthariya/Apna-Bazaar.git
