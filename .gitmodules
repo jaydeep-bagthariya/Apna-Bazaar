@@ -1,3 +1,6 @@
-[submodule "server/using-for-stripe"]
-  path = server/using-for-stripe
-  url = https://github.com/jaydeep-bagthariya/Apna-Bazaar.git
+# [submodule "server/using-for-stripe"]
+#   path = server/using-for-stripe
+#   url = https://github.com/jaydeep-bagthariya/Apna-Bazaar.git
+[submodule "using-for-stripe"]
+	path = using-for-stripe
+	url = https://github.com/jaydeep-bagthariya/using-for-stripe
