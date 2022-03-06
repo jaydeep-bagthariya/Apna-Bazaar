@@ -15,8 +15,6 @@ function Detail() {
   const product = location.state.product;
 
   const { userID } = useSelector(state => state.authAction);
-
-  console.log(product);
   
   const addToCartHandler = async () => {
     if(userID !== null) {
@@ -27,14 +25,14 @@ function Detail() {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data().count, product.id);
+        // console.log("Document data:", docSnap.data().count, product.id);
         count = docSnap.data().count;
         const cartRef = doc(db, 'cart', id);
         setDoc(cartRef, { count: count+1 }, { merge: true });
         dispatch(addSingleItem(product.id))
       } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        // console.log("No such document!");
         const newProduct = {...product, userID, count: 1}
         await setDoc(doc(db, "cart", id), newProduct)
         .then(() => {

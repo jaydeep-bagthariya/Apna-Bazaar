@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Order from "../component/Order";
 import "../css/Orderpage.css";
-import CircularProgress from "@mui/material/CircularProgress";
 
 import { doc, getDocs, collection } from "firebase/firestore";
 import db from "../firebase";
+import { Link } from "react-router-dom";
 
 function Orderpage() {
   //state for fetch user's order from cloud db
@@ -24,7 +24,6 @@ function Orderpage() {
         const querySnapshot = await getDocs(orders);
 
         await querySnapshot.docs.forEach(async (val) => {
-          console.log("val", val.data())
           const valdata = val.data();
           setOrderDetail((preval) => {
             return [
@@ -38,13 +37,12 @@ function Orderpage() {
         });
         newFetched(true);
       } else {
-        console.log("cant fetch data");
+        // console.log("cant fetch data");
       }
     }
     fetchOrderDetail();
   }, []);
 
-  console.log(orderDetail);
   return (
     <>
       <div className="order_div">
@@ -67,9 +65,10 @@ function Orderpage() {
         ) 
           :
          (
-          <div className="Order_process_div">
-            <CircularProgress />
-          </div>
+          <Link  to='/login' className="Order_process_div">
+            {/* <CircularProgress /> */}
+            <h1>Please sign in first</h1>
+          </Link>
         )
         }
         

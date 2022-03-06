@@ -36,14 +36,14 @@ function Product({ product }) {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data().count, product.id);
+        // console.log("Document data:", docSnap.data().count, product.id);
         count = docSnap.data().count;
         const cartRef = doc(db, 'cart', id);
         setDoc(cartRef, { count: count+1 }, { merge: true });
         dispatch(addSingleItem(product.id))
       } else {
         // doc.data() will be undefined in this case
-        console.log("No such document!");
+        // console.log("No such document!");
         const newProduct = {...product, userID, count: 1}
         await setDoc(doc(db, "cart", id), newProduct)
         .then(() => {
@@ -56,29 +56,14 @@ function Product({ product }) {
     }
   }
   return (
-    // <Card xs={12} sm={6} md={4}>
     <Card className="product">
-      {/* <CardActionArea className="action-_area">
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="250"
-          className="Product_img"
-          image={product.image}
-          title="Contemplative Reptile"
-        />
-      </CardActionArea> */}
       <div style={{display: "flex", alignItems: "center", justifyContent: 'center', marginTop: '1rem', cursor: 'pointer'}}>
         <img src={product.image} alt="product-image" className="product-img"/>
       </div>
       <CardContent style={{flexGrow: '1'}}>
         <Typography gutterBottom variant="h5" component="h2" className="title_div">
           <abbr title={product.title}>{product.title.length < 22 ? product.title : `${product.title.slice(0, 22)}...`}</abbr>
-          {/* {product.title} */}
         </Typography>
-        {/* <Typography variant="body2" color="textSecondary" component="p">
-          {detail}
-        </Typography> */}
         <Typography variant="body2" color="textSecondary" component="span">
           <h3><span style={{ marginRight: "2px" }}>$</span>{product.price}</h3>
         </Typography>
@@ -90,16 +75,6 @@ function Product({ product }) {
         </div>
         </Typography>
       </CardContent>
-      {/* <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          // height="250"
-          className="Product_img"
-          image={product.image}
-          title="Contemplative Reptile"
-        />
-      </CardActionArea> */}
       <CardActions>
         <Button
           size="small"

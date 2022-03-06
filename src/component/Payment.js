@@ -34,7 +34,12 @@ function Payment() {
   cartdata.cart.forEach((val) => {
     sum = sum + val.price * val.count;
   });
+  // console.log('SUMMM', sum, (sum + 5) * 100 * 75);
+  sum += 5;
   sum = sum.toFixed(2);
+  // console.log("SUM", sum, sum * 100 * 75);
+
+
   //state for strict payment button which is click only once
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState("");
@@ -49,7 +54,7 @@ function Payment() {
     const fetchClientSecret = async () => {
       const response = await axios({
         method: "post",
-        url: `http://localhost:4000/payments/create?total=${(sum + 5) * 100 * 75}`,
+        url: `https://using-for-stripe.herokuapp.com/payments/create?total=${sum * 100 * 75}`,
       });
       setClientSecret(response.data.clientSecret);
     };
@@ -62,8 +67,12 @@ function Payment() {
   const deleteCartItem = async(id) => {
     const key = id.toString().concat(user.userID);
     await deleteDoc(doc(db, "cart", key))
-    .then(() => {console.log("item remove successfully");})
-    .catch(err => {console.log("Error ", err.message);})
+    .then(() => {
+      // console.log("item remove successfully");
+    })
+    .catch(err => {
+      // console.log("Error ", err.message);
+    })
   }
 
   const emptyAllCartItems = () => {
@@ -78,7 +87,7 @@ function Payment() {
     setProcessing(true);
 
     // make confirm payment with client secret
-    const payload = await stripe
+    await stripe
       .confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
@@ -175,7 +184,7 @@ function Payment() {
                 <div className="payment_totalPrice">
                   <h3>
                     Order Total: <span style={{ marginRight: "2px" }}>$</span>
-                    {sum + 150}
+                    {sum}
                   </h3>
 
                   <button

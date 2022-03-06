@@ -6,7 +6,6 @@ import CartProduct from "./CartProduct";
 
 
 function Order({ val }) {
-  console.log("value", val);
   return (
     <div className="order_detail">
       <p>

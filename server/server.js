@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 //stripe secret key
-const stripe = require("stripe")(process.env.REACT_APP_STRIPE_SECRET_KEY);
+const stripe = require("stripe")('sk_test_51KYlZRSA5Q9jJFaaRCAOVUFXeXtq7nfct1YDGQ6I8d1kwtvEpXUZ6TLJXIfzvVDOlAvTOlEylAbZi2pyhr8gPqxq00JXlsEF9Z');
 
 const app = express();
 

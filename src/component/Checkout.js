@@ -20,7 +20,6 @@ function Checkout() {
 
   const totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
 
-  console.log(newfilterarr);
   useEffect(() => {
     const ac = new AbortController();
 		// dispatch(fetchUserCart(userID));
@@ -61,7 +60,7 @@ function Checkout() {
   cartdata.cart.forEach((val) => {
     sub = sub + val.price * val.count;
   });
-  sub = sub.toFixed(2);
+  // sub = sub.toFixed(2);
   return (
     <>
       {loading && <Loader /> }

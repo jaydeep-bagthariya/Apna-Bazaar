@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { getAuth, signOut } from "@firebase/auth";
@@ -18,6 +18,12 @@ function Header(props) {
   const {username, userID } = useSelector((state) => state.authAction);;
 
   const totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
+  // let totalItems;
+  // useEffect(() => {
+  //   totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
+  // },[cartdata.cart])
+  console.log("totalitems", totalItems);
+  console.log("totalitems123", cartdata.cart.length);
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -97,16 +103,12 @@ function Header(props) {
             <span className="nav_one">hello {username || "guest"} </span>
             <span className="nav_two">{username ? "sign out" : "sign in"}</span>
           </div>
-          <Link to={username ? "/order" : "/login"}>
+          <Link to={username ? "/order" : "/order"}>
             <div className="Header_nav_item">
               <span className="nav_one">order</span>
               <span className="nav_two">& return</span>
             </div>
           </Link>
-          {/* <div className="Header_nav_item">
-            <span className="nav_one">Your</span>
-            <span className="nav_two">Prime</span>
-          </div> */}
           <Link to="/checkout">
             <div className="Header_nav_cart">
               <ShoppingBasketIcon className="Header_CartIcon" />

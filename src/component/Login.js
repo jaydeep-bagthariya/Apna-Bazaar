@@ -31,7 +31,7 @@ export default function Login() {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const { success } = useSelector(state => state.authAction)
+  // const { success } = useSelector(state => state.authAction)
 
   const auth = getAuth();
 
