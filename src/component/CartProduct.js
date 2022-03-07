@@ -30,14 +30,14 @@ function CartProduct({
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data().count);
+        // console.log("Document data:", docSnap.data().count);
         count = docSnap.data().count;
         const cartRef = doc(db, 'cart', key);
         setDoc(cartRef, { count: count+1 }, { merge: true });
         dispatch(addSingleItem(id))
       }
       else {
-        console.log("Are yaar ab kya ho gaya !!!");
+        // console.log("Are yaar ab kya ho gaya !!!");
       }
   }
 
@@ -47,11 +47,11 @@ function CartProduct({
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data().count);
+      // console.log("Document data:", docSnap.data().count);
       count = docSnap.data().count;
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      // console.log("No such document!");
     }
 
     if(count === 1) {

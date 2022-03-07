@@ -18,17 +18,10 @@ function Header(props) {
   const {username, userID } = useSelector((state) => state.authAction);;
 
   const totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
-  // let totalItems;
-  // useEffect(() => {
-  //   totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
-  // },[cartdata.cart])
-  console.log("totalitems", totalItems);
-  console.log("totalitems123", cartdata.cart.length);
 
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const selectedCategoryHandler = (e) => {
-    console.log(e.target.value);
     setSelectedCategory(e.target.value);
     props.onItemCategoryChange(e.target.value);
   }
@@ -49,7 +42,6 @@ function Header(props) {
             label: 'Yes',
             onClick: () => {
               signOut(auth).then(() => {
-                console.log("out");
                 dispatch({type: 'SIGN_OUT'})
                 history.replace("/");
                 window.location.reload();
@@ -72,7 +64,6 @@ function Header(props) {
       // }
     } else {
       history.push("/login");
-      console.log("else");
     }
   };
 
