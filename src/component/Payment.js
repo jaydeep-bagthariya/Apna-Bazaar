@@ -55,7 +55,7 @@ function Payment() {
     const fetchClientSecret = async () => {
       const response = await axios({
         method: "post",
-        url: `https://using-for-stripe.herokuapp.com/payments/create?total=${sum * 100 * 75}`,
+        url: `https://using-for-stripe.herokuapp.com/payments/create?total=${parseInt(sum * 100 * 75)}`,
       });
       setClientSecret(response.data.clientSecret);
     };
