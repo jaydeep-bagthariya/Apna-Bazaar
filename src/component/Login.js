@@ -44,42 +44,43 @@ export default function Login() {
 
  async function loginuser(e) {
     e.preventDefault();
-    setLoading(true);
-    // dispatch(authentication(email, password, isSignUp))
-    if(isSignUp) {
-      //validate useremail and login authentication
-      if (validator.isEmail(email) && password.length>5) {
-        await  signInWithEmailAndPassword(auth, email, password).then((data)=>{
-          toast.success("User Login Successfully");
-          dispatch({type: 'AUTH_SUCCESS', payload: data.user})
-          history.push("/");
-        }).catch((error)=> {
-          toast.error("User Login Failed");
-          dispatch({type: 'AUTH_FAIL', payload: error.message})
-        })
+    history.push("/");
+    // setLoading(true);
+    // // dispatch(authentication(email, password, isSignUp))
+    // if(isSignUp) {
+    //   //validate useremail and login authentication
+    //   if (validator.isEmail(email) && password.length>5) {
+    //     await  signInWithEmailAndPassword(auth, email, password).then((data)=>{
+    //       toast.success("User Login Successfully");
+    //       dispatch({type: 'AUTH_SUCCESS', payload: data.user})
+    //       history.push("/");
+    //     }).catch((error)=> {
+    //       toast.error("User Login Failed");
+    //       dispatch({type: 'AUTH_FAIL', payload: error.message})
+    //     })
   
-      } else {
-        toast.error("Invalid email or password");
-      }
-    }
-    else {
-      //validate useremail and then create user account
-      if (validator.isEmail(email) && password.length>5) {
-        await createUserWithEmailAndPassword(auth, email, password)
-          .then((data) => {
-            toast.success("Registration Success");
-            dispatch({type: 'AUTH_SUCCESS', payload: data.user})
-            history.push("/");
-          })
-          .catch((error) => {
-            toast.success("Registration Success");
-            dispatch({type: 'AUTH_FAIL', payload: error.message})
-          });
-      } else {
-        toast.error("Invalid email or password");
-      }
-    }
-    setLoading(false);
+    //   } else {
+    //     toast.error("Invalid email or password");
+    //   }
+    // }
+    // else {
+    //   //validate useremail and then create user account
+    //   if (validator.isEmail(email) && password.length>5) {
+    //     await createUserWithEmailAndPassword(auth, email, password)
+    //       .then((data) => {
+    //         toast.success("Registration Success");
+    //         dispatch({type: 'AUTH_SUCCESS', payload: data.user})
+    //         history.push("/");
+    //       })
+    //       .catch((error) => {
+    //         toast.success("Registration Success");
+    //         dispatch({type: 'AUTH_FAIL', payload: error.message})
+    //       });
+    //   } else {
+    //     toast.error("Invalid email or password");
+    //   }
+    // }
+    // setLoading(false);
   }
 
   return (

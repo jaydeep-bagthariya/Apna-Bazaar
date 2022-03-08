@@ -51,6 +51,7 @@ function Payment() {
 
   //hook for when user change in cart then post method is execute
   useEffect(() => {
+    const ac = new AbortController();
     const fetchClientSecret = async () => {
       const response = await axios({
         method: "post",
@@ -58,8 +59,9 @@ function Payment() {
       });
       setClientSecret(response.data.clientSecret);
     };
-
+    
     fetchClientSecret();
+    return () => ac.abort();
   }, [cartdata.cart]);
   
   console.log("clientsecret", clientSecret);
