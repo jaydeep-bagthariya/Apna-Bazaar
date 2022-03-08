@@ -20,6 +20,11 @@ function Header(props) {
   const totalItems = cartdata.cart.reduce((accum, val) => {return accum + +val.count}, 0);
 
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchText, setSearchText] = useState("");
+
+  const searchHandler = (e) => {
+    props.setEnteredText(e.target.value);
+  }
 
   const selectedCategoryHandler = (e) => {
     setSelectedCategory(e.target.value);
@@ -86,7 +91,7 @@ function Header(props) {
               <option value="electronics">Electronics</option>
             </select>
           {/* </div> */}
-          <input type="text" className="Header_input" />
+          <input type="text" className="Header_input" onChange={searchHandler}/>
           <SearchIcon className="Search_logo" />
         </div>
         <div className="Header_nav">

@@ -103,3 +103,28 @@
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
  
 }
+
+@media  screen and (max-width: 768px){
+  .detail_cart {
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+  }
+  .detail_product {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+    width: 100vw;
+  }
+  .detail_product2 {
+    width: 100vw;
+    padding: 20px;
+    margin: 10px;
+    box-sizing: border-box;
+    /* margin-left: 10px; */
+  }
+  .product_page_image {
+    width: 70vw;
+    /* max-height: 500px; */
+  }
+}

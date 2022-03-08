@@ -18,14 +18,16 @@
 
 .text {
   display: flex;
-  margin-top: 40px;
+  /* margin-top: 40px; */
   justify-content: space-between;
   flex-direction: row;
 }
 
 .Contact_div {
   display: flex;
-  margin-top: 40px;
+  /* margin-top: 40px; */
+  align-items: center;
+  justify-content: center;
 }
 
 .Contact_div a {
@@ -50,7 +52,8 @@
     white-space: nowrap;
   }
   .footer{
-    height: 35px;
+    height: 40px;
+    padding-bottom: 30px;
   }
   .Contact_div{
     margin-top: 20px;

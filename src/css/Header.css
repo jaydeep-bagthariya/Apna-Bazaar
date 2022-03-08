@@ -139,6 +139,11 @@
   margin-left: 30px;
 }
 
+@media  screen and (max-width: 768px){
+  
+}
+
+
 @media only screen and (max-width: 574px) {
   .Header_Seachbar {
     grid-area: search;
@@ -151,18 +156,19 @@
   }
   .Header {
     height: 125px;
+    width: 100%;
     display: grid;
     grid-template-areas:
-      "logo logo logo search search search"
+      "logo logo search search search search"
       "nav nav nav nav nav nav";
   }
   .Header_Seachbar {
     margin: -1.5rem 4rem 0 0;
   }
-  .Header_logo {
+  /* .Header_logo {
     margin: -1.5rem 0 0 2rem;
     padding-left: 1rem;
-  }
+  } */
   .Header_nav {
     display: flex;
     justify-content: space-evenly;

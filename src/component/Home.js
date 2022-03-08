@@ -3,6 +3,7 @@ import "../css/Home.css";
 import Product from "./Product";
 import axios from "axios";
 import Loader from './common/Loader';
+import { Container } from "@material-ui/core";
 
 function Home(props) {
   const [products, setProducts] = useState([]);
@@ -36,23 +37,29 @@ function Home(props) {
           className="Home_img"
         />
         {loading ? <Loader /> :
-          <div className="Home_row">
+          <Container>
+            <div className="Home_row">
           {
             props.itemCategory === 'all' ?
-            products.map((product, id) => {
+            products
+            .filter((item) => item.title.toLowerCase().includes(props.enteredText.toLowerCase()))
+            .map((product, id) => {
               return (
                 <Product product={product} key={id}/>
               );
             })
             : products
               .filter((item) => item.category === props.itemCategory)
+              .filter((item) => item.title.toLowerCase().includes(props.enteredText.toLowerCase()))
               .map((product, id) => {
                 return (
                   <Product product={product} key={id}/>
                 )
               })
           }
-        </div>}
+            </div>
+          </Container>
+        }
 
       </div>
     </>

@@ -11,15 +11,17 @@ import { Switch, Route } from "react-router-dom";
 
 const Layout = () => {
   const [itemCategory, setItemCategory] = useState("all");
+  const [enteredText, setEnteredText] = useState("");
   const onItemCategoryChange = (selectedItemCategory) => {
     setItemCategory(selectedItemCategory)
   }
+  
   return (
     <>
-      <Header onItemCategoryChange={onItemCategoryChange}/>
+      <Header onItemCategoryChange={onItemCategoryChange} setEnteredText={setEnteredText}/>
         <Switch>
           <Route exact path="/">
-            <Home itemCategory={itemCategory}/>
+            <Home itemCategory={itemCategory} enteredText={enteredText}/>
           </Route>
           <Route exact path="/checkout">
             <Checkout />
